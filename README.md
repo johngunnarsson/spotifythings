@@ -1,4 +1,8 @@
 spotifythings
 =============
 
-A Spotify player controlled by RFID
+Welcome to the home of SpotifyThings. An open source Spotify music player that associate things with music using RFID.
+
+This project is a piece of software that preferably runs on an embedded device such as a Raspberry Pi with an RFID Reader attached to it. Via the build in web application you associate albums, tracks or playlist to a rfid-tag. To play the music associated with the tag you simply put it near the rfid reader.
+
+The software uses spotify to play music. The currently only supported rfid reader is the one from Phidgets.
