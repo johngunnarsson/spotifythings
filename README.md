@@ -1,4 +1,4 @@
-spotifythings
+SpotifyThings
 =============
 
 Welcome to the home of SpotifyThings. 
@@ -9,3 +9,5 @@ Via the build in web application you associate albums, tracks or playlist to a r
 To play the music associated with the tag you simply put it near the rfid reader.
 
 The software uses spotify to play music. The currently only supported rfid reader is the one from Phidgets.
+
+More info at http://spotifythings.com
