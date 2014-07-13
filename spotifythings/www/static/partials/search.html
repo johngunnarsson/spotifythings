@@ -1,0 +1,152 @@
+<!-- Album Modal -->
+<div class="modal fade" id="albumModal" tabindex="-1" role="dialog" aria-labelledby="albumModalLabel" aria-hidden="true" ng-controller="AlbumInfoCtrl">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div id="albumModalLabel" class="modal-title">{{album.artist}}, <strong>{{album.album_name}}</strong> ({{album.year}})</div>
+
+
+      </div>
+
+      <div class="modal-body">
+
+        <div ng-include src="'partials/link-rfid.html'" style="padding-bottom: 30px"></div>
+
+        <div class="panel panel-default" ng-repeat="disc in album.discs">
+            <div class="panel-heading"><span class="glyphicon glyphicon-record"></span> {{ disc.disc }}</div>
+
+
+            <table class="table table-striped fixed-width-table">	
+
+                <tbody>
+		<tr ng-repeat="track in disc.tracks" ng-class="{'text-muted': !track.is_available, strike: !track.is_available}" ng-mouseenter="player.trackFocused(track)" ng-mouseleave="player.trackUnFocused(track)">
+		    <td width="5%" class="text-center">
+
+		        <span class="glyphicon glyphicon-play clickable-glyph" ng-show="player.displayPlayButton(track)" ng-click="player.play(album.link, track)"></span>
+		        <span class="glyphicon glyphicon-pause clickable-glyph" ng-show="player.displayPauseButton(track)" ng-click="player.pause()"></span>
+		        <span class="glyphicon glyphicon-volume-up" ng-show="player.displayLoudspeaker(track)"></span>
+                      </td>
+		    <td width="{{ disc.containsOtherArtists ? '40%' : '85%'}}">{{track.track_name}}</td>
+		    <td width="45%" ng-if="disc.containsOtherArtists">{{ track.artist_str }}</td>
+		    <td width="10%" class="text-right">{{ formatDuration(track.duration/1000)}}</td>
+		</tr>
+                </tbody>
+	    </table>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Track modal -->
+<div class="modal fade" id="trackModal" tabindex="-1" role="dialog" aria-labelledby="trackModalLabel" aria-hidden="true" ng-controller="TrackInfoCtrl">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div id="trackModalLabel" class="modal-title">{{track.name}}</div>
+
+
+      </div>
+
+      <div class="modal-body">
+
+        <div ng-include src="'partials/link-rfid.html'" style="padding-bottom: 30px"></div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<div class="input-group">
+	<input type="text" class="form-control" ng-model="query" ng-keypress="inputKeyPress($event);" placeholder="Search for music">
+	<span class="input-group-btn">
+		<button style="width: 100px" type="button" class="btn btn-default" ng-click="search()" ng-disabled="searchInProgress">{{ searchInProgress ? 'Searching...' : 'Search' }}</button>
+	</span>
+</div>
+
+<br/>		
+
+
+
+<ul class="nav nav-tabs" ng-show="lastSearchTerm">
+	<li class="active"><a data-target="#tracks" data-toggle="tab">Tracks <span class="badge">{{totalTracks}}</span></a></li>
+	<li><a data-target="#albums" data-toggle="tab">Albums <span class="badge">{{totalAlbums}}</span></a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content" ng-show="lastSearchTerm">
+	<div class="tab-pane active" id="tracks">
+
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+					        <th width="35px"></th>
+						<th>Track</th>
+						<th>Artist</th>
+						<th>Time</th>
+						<th>Popularity</th>
+						<th>Album</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="track in tracks" ng-mouseenter="trackPlayer.trackFocused(track)" ng-mouseleave="trackPlayer.trackUnFocused(track)">
+					        <td>
+                                                            <span class="glyphicon glyphicon-play clickable-glyph" ng-show="trackPlayer.displayPlayButton(track)" ng-click="trackPlayer.play(track.link, track)"></span>
+                                                            <span class="glyphicon glyphicon-pause clickable-glyph" ng-show="trackPlayer.displayPauseButton(track)" ng-click="trackPlayer.pause()"></span>
+                                                            <span class="glyphicon glyphicon-volume-up" ng-show="trackPlayer.displayLoudspeaker(track)"></span>
+
+					        </td>
+						<td>
+						    <a href ng-click="showTrackInfo(track.link)">{{track.track_name}}</a>
+		                                     </td>
+						<td>{{track.artists.join(', ')}}</td>
+						<td>{{formatDuration(track.duration / 1000)}}</td>
+						<td><meter value="{{track.popularity/100}}"></meter></td>
+						<td>{{track.album}}</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="row placeholders center-block">
+		    <button  type="button" class="btn btn-default" ng-click="showMoreTracks()" ng-disabled="!hasMoreTracks">Show more...</button>
+		</div>
+	</div>
+
+	<div class="tab-pane" id="albums">
+
+		<div class="row placeholders" ng-repeat="row in _.range(albumGrid.getRowCount())">
+			<div class="col-xs-6 col-sm-3 placeholder" ng-repeat="album in albumGrid.getItemsForRow(row)">
+				<img ng-src="{{album.coverUrl()}}" class="img-responsive" ng-click="showAlbumInfo(album.link)">
+				<h4>{{ album.album_name }}</h4>
+				<span class="text-muted">{{ album.artist_name }}</span>
+			</div>
+
+		</div>
+		
+		<div class="row placeholders center-block">
+		    <button  type="button" class="btn btn-default" ng-click="showMoreAlbums()" ng-disabled="!hasMoreAlbums">Show more...</button>
+		</div>
+
+	</div>
+
+</div>

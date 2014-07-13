@@ -1,0 +1,23 @@
+<div ng-controller="PlayQueueCtrl">
+    <h3 ng-show="tracks.length == 0">no tracks in queue</h3>
+    <table class="table table-striped fixed-width-table" ng-show="tracks.length > 0">
+        <thead>
+            <th width="5%"></th>
+            <th width="40%">Track</th>
+            <th width="45%">Artist</th>
+            <th  class="text-right" width="10%">Duration</th>
+        </thead>				
+        <tbody>
+            <tr ng-repeat="track in tracks" ng-class="{'text-muted': !track.is_available, strike: !track.is_available}" ng-mouseenter="player.trackFocused(track)" ng-mouseleave="player.trackUnFocused(track)">
+                <td>
+                    <span class="glyphicon glyphicon-play clickable-glyph" ng-show="player.displayPlayButton(track)" ng-click="player.play('playqueue', track)"></span>
+                    <span class="glyphicon glyphicon-pause clickable-glyph" ng-show="player.displayPauseButton(track)" ng-click="player.pause()"></span>
+                    <span class="glyphicon glyphicon-volume-up" ng-show="player.displayLoudspeaker(track)"></span>
+                </td>
+                <td>{{track.track_name}}</td>
+                <td>{{ track.artists.join(', ') }}</td>
+                <td class="text-right">{{ formatDuration(track.duration/1000)}}</td>
+            </tr>
+        </tbody>
+    </table>
+<div>

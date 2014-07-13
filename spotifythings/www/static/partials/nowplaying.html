@@ -1,0 +1,12 @@
+<table ng-controller="NowPlayingCtrl" ng-show="hasData">
+    <tr>
+        <td style="text-align: right; color: black">
+            <div style="width: 250px; padding-left: 7px; padding-right: 7px">
+                <h5 style="white-space:nowrap; overflow: hidden; text-overflow:ellipsis; margin-bottom: 5px; margin-top: 5px">{{trackName}}</h5>
+                <h6 style="white-space:nowrap; overflow: hidden; text-overflow:ellipsis; margin-bottom: 5px; margin-top: 5px">{{artists}}</h6>
+            </div>
+        </td>
+        <td><img ng-src="{{coverUrl()}}" height="50px"></img></td>
+
+    </tr>
+</table>

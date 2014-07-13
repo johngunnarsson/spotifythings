@@ -1,0 +1,4 @@
+include DESCRIPTION.rst
+include README.rst
+include spotifythings/spotify_appkey.key
+recursive-include spotifythings/www *

@@ -1,0 +1,38 @@
+#! /bin/bash
+# Copyright (c) 1996-2014 John Gunnarsson.
+# All rights reserved.
+#
+# Author: John Gunnarsson, 2014
+#
+#
+# /etc/init.d/spotifythings_daemon
+#
+### BEGIN INIT INFO
+# Provides: spotifythings_daemon
+# Required-Start:
+# Should-Start:
+# Required-Stop:
+# Should-Stop:
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description: SpotifyThings Deamon
+# Description: SpotifyThings Deamon
+### END INIT INFO
+
+# Activate the python virtual environment
+. /home/pi/spotifythings/bin/activate
+
+case "$1" in
+  start|stop|restart)
+    echo $"Issuing server $1"
+    # Start the daemon
+    spotifythings start
+    ;;
+  *)
+    # Refuse to do other stuff
+    echo $"Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0

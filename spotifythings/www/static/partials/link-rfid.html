@@ -1,0 +1,25 @@
+<!-- templates -->
+<script type='text/ng-template' id='current-status.html'>
+    <p ng-if="tags.length == 0">No RFID tag associated</p>
+    <p ng-if="tags.length > 0">Is associated with {{tags.length > 1 ? 'tags' : 'tag'}} <span class="label label-default" style="margin-right: 5px" ng-repeat="tag in tags">{{tag}} <span class="glyphicon glyphicon-remove" style="cursor: pointer" ng-click="unlinkTag(tag)"></span> </span></p>
+
+    <button type="button" class="btn btn-primary" ng-click="switchToAssociationMode()">Associate</button>
+</script>
+
+<script type='text/ng-template' id='waiting-tag.html'>
+    <p>Waiting for tag...</p>
+    <div ng-if="overwriteTag" class="alert alert-danger">Tag {{overwriteTag.tag}} is already assiciated to {{overwriteTag.name}}</div>
+    <button ng-if="overwriteTag" type="button" class="btn btn-danger" ng-click="relinkTag(overwriteTag.tag)">Overwrite</button>
+    <button type="button" class="btn btn-default" ng-click="switchToStatusMode()">Cancel</button>
+</script>
+
+
+
+<div class="container-fluid" ng-controller="RFIDCtrl">
+    <div class="row">
+        <div class="col-xs-2">
+            <img src="/static/image/rfid-tag-icon.png" height="80px"/>
+        </div>
+        <div class="col-xs-10" ng-include src="activeView"></div>
+    </div>
+</div>

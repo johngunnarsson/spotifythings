@@ -1,0 +1,17 @@
+<div ng-controller="RFIDTagsCtrl">
+
+
+    <div ng-repeat="tag in tags" ng-if="tag.grid.getRowCount() > 0">
+        <h3>{{tag.caption}}</h3>
+
+
+        <div class="row placeholders" ng-repeat="row in _.range(tag.grid.getRowCount())">
+            <div class="col-xs-6 col-sm-3 placeholder" ng-repeat="item in tag.grid.getItemsForRow(row)">
+                <img src="/static/image/missing-album-lg.png" class="img-responsive" alt="{{ item.name }}">
+                <h4>{{ item.name }}</h4>
+
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>

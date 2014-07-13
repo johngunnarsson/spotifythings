@@ -45,6 +45,9 @@ coverage.xml
 # Rope
 .ropeproject
 
+# Ninja
+*.nja
+
 # Django stuff:
 *.log
 *.pot
@@ -52,3 +55,5 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Database
+*.db

@@ -1,0 +1,59 @@
+<!-- Playlist Modal -->
+<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog" aria-labelledby="playlistModalLabel" aria-hidden="true" ng-controller="PlaylistInfoCtrl">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div id="playlistModalLabel" class="modal-title"><b>{{playlist.name}}</b></div>
+      </div>
+
+      <div class="modal-body">
+
+        <div ng-include src="'partials/link-rfid.html'" style="padding-bottom: 30px"></div>
+
+        <div class="panel panel-default">
+
+            <table class="table table-striped fixed-width-table">				
+                <tbody>
+		<tr ng-class="{'text-muted': !track.is_available, strike: !track.is_available}" ng-repeat="track in playlist.tracks" ng-mouseenter="player.trackFocused(track)" ng-mouseleave="player.trackUnFocused(track)">
+		    <td width="5%">
+		        <span class="glyphicon glyphicon-play clickable-glyph" ng-show="player.displayPlayButton(track)" ng-click="player.play(playlist.link, track)"></span>
+		        <span class="glyphicon glyphicon-pause clickable-glyph" ng-show="player.displayPauseButton(track)" ng-click="player.pause()"></span>
+		        <span class="glyphicon glyphicon-volume-up" ng-show="player.displayLoudspeaker(track)"></span>
+		    </td>
+		    <td width="40%">{{track.track_name}}</td>
+		    <td width="45%">{{ track.artists.join(', ') }}</td>
+		    <td width="10%" class="text-right">{{ formatDuration(track.duration/1000)}}</td>
+		</tr>
+                </tbody>
+	    </table>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+<div ng-controller="PlaylistCtrl">
+
+
+    <div class="row placeholders" ng-repeat="row in _.range(grid.getRowCount())">
+        <div class="col-xs-6 col-sm-3 placeholder" ng-repeat="playlist in grid.getItemsForRow(row)">
+            <img src="/static/image/missing-album-lg.png" class="img-responsive" alt="{{ playlist.name }}" ng-click="showPlaylistInfo(playlist.link)">
+            <h4>{{ playlist.name }}</h4>
+
+        </div>
+
+    </div>
+    		
+</div>
