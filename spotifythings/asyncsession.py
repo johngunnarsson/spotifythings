@@ -12,9 +12,9 @@ import os
 import spotify
 from spotify import Settings, AlbumBrowser, Link, SpotifyError
 from playqueue import PlayeQueueManager
-from spotify.audiosink.alsa import AlsaSink
 from event import EventHook
 from eventsink import EventSink
+from alsaplayer import AlsaPlayer
 
 logger = logging.getLogger(__name__)
 
@@ -217,7 +217,8 @@ class SpotifyAsyncSessionManager(object):
         self.last_track_playback_time_notified = 0
 
         # Audio sink
-        self.audio = AlsaSink(backend=self)
+        #self.audio = AlsaSink(backend=self)
+        self.audio = AlsaPlayer()
         self.audio_sink_lock = threading.Lock()
 
         # Event notifications
@@ -291,6 +292,7 @@ class SpotifyAsyncSessionManager(object):
             if self.track_playback_time - self.last_track_playback_time_notified >= 1:
                 self.__fire_playback_progress_event()
                 self.last_track_playback_time_notified = self.track_playback_time
+                #print 'num_frames: {0}, frame_size: {1}'.format(num_frames, frame_size)
 
             return played_frames
 
@@ -323,16 +325,9 @@ class SpotifyAsyncSessionManager(object):
     # Private
     def __pause_player(self):
         self.session.play(0)
-
-        #with self.audio_sink_lock:
-        #    self.audio.pause()
-
         self.is_playing = False
 
     def __start_player(self):
-        with self.audio_sink_lock:
-            self.audio.start()
-
         self.session.play(1)
         self.is_playing = True
 
